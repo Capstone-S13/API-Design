@@ -4,16 +4,9 @@ info:
   description: first draft of mall server API design
   version: 1.0.0
 paths:
-  /order/{id}:
-    description: notify, cancel and update mall server about delivery order
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
+  /order/create:
     post:
-      summary: notify mall server about new delivery order
+      summary: create a new order in the database
       requestBody: 
         content:
           application/json:
@@ -27,16 +20,7 @@ paths:
                 recipientId:
                   type: string
                   description: id of customer
-                status:
-                  type: string
-                  enum:
-                    - order received
-                    - robot dispatched
-                    - on the way
-                    - at hub
-                    - delivered
-                    - cancelled
-                    - failed
+                  example: recipient1
                 location:
                   type: integer
                   description: postal code of store 
@@ -45,7 +29,9 @@ paths:
                   type: integer
                   description: postal code of delivery address
                   example: 487372
-                  
+                itemDescription:
+                  type: string
+                  example: random parcel from ccp
       responses:
         200:
           description: success response
@@ -54,24 +40,39 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
+                  orderId:
+                    type: integer
+                    example: 3123
+                  storeId:
                     type: string
-                    enum:
-                      - order received
-                      - robot dispatched
-                      - on the way
-                      - at hub
-                      - delivered
-                      - cancelled
-                      - failed
-                  robotId: 
+                    description: id of store or person dispatching the order
+                    example: store1
+                  recipientId:
                     type: string
-                    description: robot assigned for delivery
-                    example: outdoor robot 1
-                  estimatedDeliveryTime:
-                    type: number
+                    description: id of customer
+                    example: recipient1
+                  location:
+                    type: integer
+                    description: postal code of store 
+                    example: 486038
+                  deliveryAddress:
+                    type: integer
+                    description: postal code of delivery address
+                    example: 487372
+                  itemDescription:
+                    type: string
+                    example: random parcel from ccp
+                  deliveryTime:
+                    type: integer
                     example: 12
-                    
+  /order/{id}:
+    description: notify, cancel and update mall server about delivery order
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
     delete:
       summary: delete order by id
       responses:
