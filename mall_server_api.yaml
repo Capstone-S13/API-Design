@@ -88,7 +88,7 @@ paths:
         schema:
           type: integer
     get:
-      summary: get order status from mall server
+      summary: get order status from the database
       responses:
         200:
           description: success response
@@ -150,18 +150,8 @@ paths:
         required: true
         schema:
           type: integer
-    patch:
-      summary: update the robot id by order id to database
-      requestBody: 
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                robotId: 
-                  type: string
-                  description: robot assigned for delivery
-                  example: outdoor robot 1
+    get:
+      summary: get robot id from the database
       responses:
         200:
           description: success response
@@ -171,6 +161,77 @@ paths:
                 type: object
                 properties:
                   robotId: 
-                    type: string
+                    type: integer
                     description: robot assigned for delivery
-                    example: outdoor robot 1
+                    example: 1234
+    patch:
+      summary: update the robot id by order id to database
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                robotId: 
+                  type: integer
+                  description: robot assigned for delivery
+                  example: 1234
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  robotId: 
+                    type: integer
+                    description: robot assigned for delivery
+                    example: 1234
+  /rmf/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: notifying rmf instance of an order, need to get back robotId
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                location:
+                  type: integer
+                  description: postal code of store 
+                  example: 486038
+                deliveryAddress:
+                  type: integer
+                  description: postal code of delivery address
+                  example: 487372
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+                    example: 3123
+                  robotId:
+                    type: integer
+                    example: 1234
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
