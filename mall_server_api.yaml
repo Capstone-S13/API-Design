@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Capstone API Design
+  description: ello this is a placeholder for now
+  version: 1.0.0
+paths:
+  /order/{id}:
+    description: notify, cancel and update mall server about delivery order
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: notify mall server about delivery order
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                storeId:
+                  type: string
+                  description: id of store or person dispatching the order
+                  example: store1
+                recipientId:
+                  type: string
+                  description: id of customer
+                status:
+                  type: string
+                  enum:
+                    - order received
+                    - robot dispatched
+                    - on the way
+                    - at hub
+                    - delivered
+                    - cancelled
+                    - failed
+                location:
+                  type: integer
+                  description: postal code of store 
+                  example: 486038
+                deliveryAddress:
+                  type: integer
+                  description: postal code of delivery address
+                  example: 487372
+                  
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+                  robotId: 
+                    type: string
+                    description: robot assigned for delivery
+                    example: outdoor robot 1
+                  
+                  estimatedDeliveryTime:
+                    type: number
+                    example: 12
+                    
+    delete:
+      summary: delete order by id
+      responses:
+        200:
+          description: success resonponse
+    patch:
+      summary: edit order by id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - order received
+                    - robot dispatched
+                    - on the way
+                    - at hub
+                    - delivered
+                    - cancelled
+                    - failed
+                location:
+                  type: integer
+                  description: postal code of store 
+                  example: 486038
+                deliveryAddress:
+                  type: integer
+                  description: postal code of delivery address
+                  example: 487372
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: string
+                    example: order1
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+                  robotInCharge: 
+                    type: string
+                    example: outdoor robot 1
+                  estimatedDeliveryTime:
+                    type: number
+                    example: 12
+                    
+        
+  /order/{id}/status:
+    description: notify, cancel and update mall server about delivery order
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: get order status from mall server
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+                  robotId: 
+                    type: string
+                    description: robot assigned for delivery
+                    example: outdoor robot 1
+                  
+                  estimatedDeliveryTime:
+                    type: number
+                    example: 12
