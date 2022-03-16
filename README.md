@@ -1,4 +1,4 @@
-#API Design
+# API Design
 
 ## Link to Miro Board of API Design
 https://miro.com/welcomeonboard/a3lmYXhPNEVWVHdQV0VGY3F0djdRWGdnbnZDb3ZaakpOV3Uxbk01U0VEOWRmNFJyR2gzWGJ5bGhLS21WcTFnUnwzMDc0NDU3MzUxNTMyNzUwOTI5?invite_link_id=453069555081
