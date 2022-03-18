@@ -1,0 +1,166 @@
+openapi: 3.0.3
+info:
+  title: System Server API Design
+  description: first draft of mall server API design
+  version: 1.0.1
+paths:
+  /order/create:
+    post:
+      summary: notify mall server of a new order
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipientId:
+                  type: string
+                  description: id of customer
+                  example: recipient1
+                storeAddress:
+                  type: integer
+                  description: postal code of store 
+                  example: 486038
+                recipientAddress:
+                  type: integer
+                  description: postal code of delivery address
+                  example: 487372
+                itemDescription:
+                  type: string
+                  example: random parcel from ccp
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+                    example: 3123
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+  /order/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    delete:
+      summary: delete order by id
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+  /order/{id}/status:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: get order status from the mall server
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+    patch:
+      summary: update the order status by order id to mall server
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - order received
+                    - robot dispatched
+                    - on the way
+                    - at hub
+                    - delivered
+                    - cancelled
+                    - failed
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+                    example: 3123
+                  status:
+                    type: string
+                    enum:
+                      - order received
+                      - robot dispatched
+                      - on the way
+                      - at hub
+                      - delivered
+                      - cancelled
+                      - failed
+  /order/{id}/robotId:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: get robot id from the mall server
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  robotId: 
+                    type: integer
+                    description: robot assigned for delivery
+                    example: 1234
+    
