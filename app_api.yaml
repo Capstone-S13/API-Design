@@ -1,33 +1,29 @@
 openapi: 3.0.3
 info:
-  title: App API Design
+  title: Customer App API Design
   description: first draft of app API design
-  version: 1.0.0
+  version: 1.0.1
 paths:
   /order/create:
     post:
-      summary: notifying mall server of creation of new order
+      summary: notifying system server of creation of new order
       requestBody: 
         content:
           application/json:
             schema:
               type: object
               properties:
-                storeId:
-                  type: string
-                  description: id of store or person dispatching the order
-                  example: store1
                 recipientId:
                   type: string
                   description: id of customer
                   example: recipient1
-                location:
+                storeAddress:
                   type: integer
                   description: postal code of store 
                   example: 486038
-                deliveryAddress:
+                recipientAddress:
                   type: integer
-                  description: postal code of delivery address
+                  description: postal code of customer address
                   example: 487372
                 itemDescription:
                   type: string
@@ -51,20 +47,17 @@ paths:
                     type: string
                     description: id of customer
                     example: recipient1
-                  location:
+                  storeAddress:
                     type: integer
                     description: postal code of store 
                     example: 486038
-                  deliveryAddress:
+                  recipientAddress:
                     type: integer
-                    description: postal code of delivery address
+                    description: postal code of customer address
                     example: 487372
                   itemDescription:
                     type: string
                     example: random parcel from ccp
-                  deliveryTime:
-                    type: integer
-                    example: 12
   /order/{id}:
     parameters:
       - in: path
@@ -73,7 +66,7 @@ paths:
         schema:
           type: integer
     delete:
-      summary:  notifying mall server of deletion of by order id
+      summary:  notifying system server of deletion of by order id
       responses:
         200:
           description: success resonponse
@@ -86,7 +79,7 @@ paths:
         schema:
           type: integer
     get:
-      summary: get order status from mall server
+      summary: get order status from system server
       responses:
         200:
           description: success response
@@ -95,6 +88,9 @@ paths:
               schema:
                 type: object
                 properties:
+                  orderId:
+                    type: integer
+                    example: 1
                   status:
                     type: string
                     enum:
@@ -105,42 +101,7 @@ paths:
                       - delivered
                       - cancelled
                       - failed
-    patch:
-      summary: get mall server to update the order status by order id
-      requestBody: 
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  enum:
-                    - order received
-                    - robot dispatched
-                    - on the way
-                    - at hub
-                    - delivered
-                    - cancelled
-                    - failed
-      responses:
-        200:
-          description: success response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum:
-                      - order received
-                      - robot dispatched
-                      - on the way
-                      - at hub
-                      - delivered
-                      - cancelled
-                      - failed
+    
   /order/{id}/robotId:
     parameters:
       - in: path
@@ -149,31 +110,7 @@ paths:
         schema:
           type: integer
     get:
-      summary: get robot id from mall server
-      responses:
-        200:
-          description: success response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  robotId: 
-                    type: integer
-                    description: robot assigned for delivery
-                    example: 1234
-    patch:
-      summary: get mall server to update the robot id by order id
-      requestBody: 
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                robotId: 
-                  type: integer
-                  description: robot assigned for delivery
-                  example: 1234
+      summary: get robot id from system server
       responses:
         200:
           description: success response
