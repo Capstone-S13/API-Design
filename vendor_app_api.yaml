@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Customer App API Design
+  title: Vendor App API Design
   description: first draft of app API design
   version: 1.0.1
 paths:
