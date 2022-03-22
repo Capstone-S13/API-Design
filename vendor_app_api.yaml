@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Customer App API Design
+  description: first draft of app API design
+  version: 1.0.1
+paths:
+  /order/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    delete:
+      summary:  notifying system server of deletion of by order id
+      responses:
+        200:
+          description: success resonponse
+    patch:
+      summary: update the order status by order id to database
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - robot dispatched
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - robot dispatched
