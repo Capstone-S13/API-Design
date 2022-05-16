@@ -1,0 +1,170 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/capstone_s13/delivery_rmf_api_server/1.0.0
+info:
+  description: API for the company-specific Delivery RMF API Server
+  version: "1.0.0"
+  title: Delivery RMF API Server API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: developers
+
+paths:
+  /order: # Note that this is coming FROM the system server
+    post:
+      summary: dispatches a new delivery order
+      operationId: dispatchOrder
+      description: dispatches an order to be collected
+      responses:
+        '201':
+          description: order dispatched
+        '409':
+          description: an existing order has been dispatched
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchOrder'
+
+  /order/{order}:
+    get:
+      parameters:
+        - in: path
+          name: order
+          required: true
+          schema:
+            $ref: '#/components/schemas/Order'
+          description: the Order JSON of the dispatched order
+      summary: gets the status of the order
+      operationId: getOrderStatus
+      description: gets the status of the order according to the id of the order.
+      responses:
+        '200':
+          description: order status of the given order id is found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderStatus'
+        '404':
+          description: order not found
+
+  /receive-robot:
+    post:
+      description: request for an external delivery robot to be accepted into the fleet
+      operationId: receiveRobot
+      responses:
+        '201':
+          description: robot successfully accepted into fleet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiveRobot'
+
+
+components:
+  schemas:
+    Order:
+      description: contains the order id and name of the delivery company
+      type: object
+      required:
+        - id
+        - company_name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        company_name:
+          type: string
+          example: barg delivery
+        order_description:
+          type : string
+          example : "size 10"
+    OrderStatus:
+      type: object
+      description: the status of the delivery order
+      required:
+        - order
+        - status
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        status: # should use convert this into an enum
+          type: integer
+          example: 1
+          enum: [0, 1, 2, 3, 4, 5, 6 , 7 ,8]
+          # 0 - request sent
+          # 1 - order prepared by store
+          # 2 - internal robot dispatched
+          # 3 - order onroute to hub
+          # 4 - order in hub
+          # 5 - order on route to destination address
+          # 6 - order in destination hub
+          # 7 - destination internal robot dispatched
+          # 8 - order fulfilled
+    Address:
+      type: object
+      required:
+        - building_name
+        - unit
+      properties:
+        building_name:
+          type: string
+          example: Vovi City
+        unit:
+          type: string
+          example: 'robots r us'
+    Robot:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: barg_external_robot_1121d
+    Operation:
+      description: whether the robot is collecting or depositing a parcel
+      type: object
+      required:
+        - task
+      properties:
+        task:
+          type: integer
+          example: 0
+          enum: [0, 1]
+          # 0 - delivering to hub
+          # 1 - collecting from hub
+    DispatchOrder:
+      type: object
+      required:
+        - order
+        - store_address
+    ReceiveRobot:
+      type: object
+      required:
+        - robot
+        - ingress_point
+        - egress_point
+        - store_address
+        - order
+        - operation
+      properties:
+        ingress_point:
+          $ref: '#/components/schemas/Address'
+        egress_point:
+          $ref: '#/components/schemas/Address'
+        store_address:
+          $ref: '#/components/schemas/Address'
+        order:
+          $ref: '#/components/schemas/Order'
+        robot:
+          $ref: '#/components/schemas/Robot'
+        operation:
+          $ref: '#/components/schemas/Operation'
