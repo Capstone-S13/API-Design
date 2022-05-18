@@ -1,3 +1,5 @@
+# GET req for order status from RMF AND send POST req from RMF
+
 openapi: 3.0.0
 servers:
   # Added by API Auto Mocking Plugin
@@ -27,7 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Order' # returns new orderId in Order object
         '400':
           description: 'invalid input, object invalid'
         '409':
@@ -73,6 +75,28 @@ components:
         order_description:
           type : string
           example : "size 10"
+    OrderStatus:
+      type: object
+      description: the status of the delivery order
+      required:
+        - order
+        - status
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        status: # should use convert this into an enum
+          type: integer
+          example: 1
+          enum: [0, 1, 2, 3, 4, 5, 6 , 7 ,8]
+          # 0 - order received
+          # 1 - robot dispatched
+          # 2 - at store hub
+          # 3 - between hubs
+          # 4 - at destination hub
+          # 5 - arrived
+          # 6 - delivered
+          # 7 - cancelled
+          # 8 - failed
     Address:
       type: object
       required:
@@ -119,6 +143,10 @@ components:
           type: string
           example: raspberry pi model 3B 4GB
         customer_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851

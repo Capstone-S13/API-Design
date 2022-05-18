@@ -4,7 +4,7 @@ info:
   description: first draft of app API design
   version: 1.0.1
 paths:
-  /order/{id}:
+  /store/{userId}/order/{orderId}:
     parameters:
       - in: path
         name: id

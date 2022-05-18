@@ -100,15 +100,15 @@ components:
           type: integer
           example: 1
           enum: [0, 1, 2, 3, 4, 5, 6 , 7 ,8]
-          # 0 - request sent
-          # 1 - order prepared by store
-          # 2 - internal robot dispatched
-          # 3 - order onroute to hub
-          # 4 - order in hub
-          # 5 - order on route to destination address
-          # 6 - order in destination hub
-          # 7 - destination internal robot dispatched
-          # 8 - order fulfilled
+          # 0 - order received
+          # 1 - robot dispatched
+          # 2 - at store hub
+          # 3 - between hubs
+          # 4 - at destination hub
+          # 5 - arrived
+          # 6 - delivered
+          # 7 - cancelled
+          # 8 - failed
     Address:
       type: object
       required:

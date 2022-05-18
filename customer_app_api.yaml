@@ -4,61 +4,22 @@ info:
   description: first draft of app API design
   version: 1.0.1
 paths:
-  /order/create:
+  /customer/{userId}/create/{storeId}:
     post:
       summary: notifying system server of creation of new order
       requestBody: 
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                recipientId:
-                  type: string
-                  description: id of customer
-                  example: recipient1
-                storeAddress:
-                  type: integer
-                  description: postal code of store 
-                  example: 486038
-                recipientAddress:
-                  type: integer
-                  description: postal code of customer address
-                  example: 487372
-                itemDescription:
-                  type: string
-                  example: random parcel from ccp
+              $ref: '#/components/schemas/SubmitOrder'
       responses:
         200:
-          description: success response
+          description: success response. Return OrderStatus.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  orderId:
-                    type: integer
-                    example: 3123
-                  storeId:
-                    type: string
-                    description: id of store or person dispatching the order
-                    example: store1
-                  recipientId:
-                    type: string
-                    description: id of customer
-                    example: recipient1
-                  storeAddress:
-                    type: integer
-                    description: postal code of store 
-                    example: 486038
-                  recipientAddress:
-                    type: integer
-                    description: postal code of customer address
-                    example: 487372
-                  itemDescription:
-                    type: string
-                    example: random parcel from ccp
-  /order/{id}:
+                $ref: '#/components/schemas/OrderStatus'
+  /customer/{userId}/order/{orderId}/delete:
     parameters:
       - in: path
         name: id
@@ -71,7 +32,7 @@ paths:
         200:
           description: success resonponse
         
-  /order/{id}/status:
+  /customer/{userId}/order/{orderId}/status:
     parameters:
       - in: path
         name: id
@@ -86,23 +47,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  orderId:
-                    type: integer
-                    example: 1
-                  status:
-                    type: string
-                    enum:
-                      - order received
-                      - robot dispatched
-                      - on the way
-                      - at hub
-                      - delivered
-                      - cancelled
-                      - failed
+                $ref: '#/components/schemas/OrderStatus'
     
-  /order/{id}/robotId:
+  /customer/{userId}/order/{orderId}/robotId:
     parameters:
       - in: path
         name: id
@@ -117,9 +64,90 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  robotId: 
-                    type: integer
-                    description: robot assigned for delivery
-                    example: 1234
+                $ref: '#/components/schemas/Robot'
+
+components:
+  schemas:
+    Order:
+      description: contains the order id and name of the delivery company
+      type: object
+      required:
+        - id
+        - company_name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        company_name:
+          type: string
+          example: barg delivery
+        order_description:
+          type : string
+          example : "size 10"
+    OrderStatus:
+      type: object
+      description: the status of the delivery order
+      required:
+        - order
+        - status
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        status: # should use convert this into an enum
+          type: integer
+          example: 1
+          enum: [0, 1, 2, 3, 4, 5, 6 , 7 ,8]
+          # 0 - order received
+          # 1 - robot dispatched
+          # 2 - at store hub
+          # 3 - between hubs
+          # 4 - at destination hub
+          # 5 - arrived
+          # 6 - delivered
+          # 7 - cancelled
+          # 8 - failed
+    SubmitOrder:
+      type: object
+      required:
+        - order_details
+        - customer_id
+        - store_id
+        - store_address
+        - customer_address
+      properties:
+        order_details:
+          type: string
+          example: raspberry pi model 3B 4GB
+        customer_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_address:
+          $ref: '#/components/schemas/Address'
+        customer_address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      required:
+        - building_name
+        - unit
+      properties:
+        building_name:
+          type: string
+          example: Vivo City
+        unit:
+          type: string
+          example: 'robots r us'
+    Robot:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: barg_external_robot_1121d
