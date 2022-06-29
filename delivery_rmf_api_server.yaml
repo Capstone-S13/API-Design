@@ -99,16 +99,17 @@ components:
         status: # should use convert this into an enum
           type: integer
           example: 1
-          enum: [0, 1, 2, 3, 4, 5, 6 , 7 ,8]
-          # 0 - order received
-          # 1 - robot dispatched
-          # 2 - at store hub
-          # 3 - between hubs
-          # 4 - at destination hub
-          # 5 - arrived
-          # 6 - delivered
-          # 7 - cancelled
-          # 8 - failed
+          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+          # 0 - order sent
+          # 1 - order received
+          # 2 - robot dispatched
+          # 3 - at store hub
+          # 4 - between hubs
+          # 5 - at destination hub
+          # 6 - arrived
+          # 7 - delivered
+          # 8 - cancelled
+          # 9 - failed
     Address:
       type: object
       required:
