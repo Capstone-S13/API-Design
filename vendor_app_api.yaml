@@ -4,39 +4,116 @@ info:
   description: first draft of app API design
   version: 1.0.1
 paths:
-  /store/{userId}/order/{orderId}:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
-    delete:
-      summary:  notifying system server of deletion of by order id
-      responses:
-        200:
-          description: success resonponse
-    patch:
-      summary: update the order status by order id to database
-      requestBody: 
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  enum:
-                    - robot dispatched
+  /store/landing:
+    get:
+      summary: get all orders of the store from system server
       responses:
         200:
           description: success response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum:
-                      - robot dispatched
+                $ref: '#/components/schemas/landingResponse'
+
+  /store/order/{orderId}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    post:
+      summary: set order status from system server
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatus'
+      responses:
+        200:
+          description: success response
+
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - orderId
+        - order_details
+        - customer_id
+        - store_id
+        - store_address
+        - customer_address
+        - status
+      properties:
+        order_details:
+          type: string
+          example: raspberry pi model 3B 4GB
+        customer_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_address:
+          $ref: '#/components/schemas/Address'
+        customer_address:
+          $ref: '#/components/schemas/Address'
+        status: # should use convert this into an enum
+          type: integer
+          example: 0
+          enum: [1, 2, 8, 9]
+          # 0 - order sent
+          # 1 - order received
+          # 2 - robot dispatched
+          # 3 - at store hub
+          # 4 - between hubs
+          # 5 - at destination hub
+          # 6 - arrived
+          # 7 - delivered
+          # 8 - cancelled
+          # 9 - failed
+        robot_id:
+          type: string
+          example: barg_external_robot_1121d
+
+    landingResponse:
+      type: object
+      required:
+        - orders
+      properties:
+        orders:
+          type: list
+          example: ['#/components/schemas/Order', '#/components/schemas/Order']
+    
+    OrderStatus:
+      type: object
+      required:
+        - orderId
+        - customer_id
+        - status
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        customer_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        status: # should use convert this into an enum
+          type: integer
+          example: 1
+          enum: [1, 2, 8, 9]
+          # 0 - order sent
+          # 1 - order received
+          # 2 - robot dispatched
+          # 3 - at store hub
+          # 4 - between hubs
+          # 5 - at destination hub
+          # 6 - arrived
+          # 7 - delivered
+          # 8 - cancelled
+          # 9 - failed

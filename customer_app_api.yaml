@@ -4,7 +4,18 @@ info:
   description: first draft of app API design
   version: 1.0.1
 paths:
-  /customer/{userId}/create/{storeId}:
+  /customer/landing:
+    get:
+      summary: get all orders of the customer from system server and get all stores
+      responses:
+        200:
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/landingResponse'
+
+  /customer/create/{storeId}:
     post:
       summary: notifying system server of creation of new order
       requestBody: 
@@ -15,32 +26,29 @@ paths:
       responses:
         200:
           description: success response. Return OrderStatus.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderStatus'
-  /customer/{userId}/order/{orderId}/delete:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
-    delete:
-      summary:  notifying system server of deletion of by order id
-      responses:
-        200:
-          description: success resonponse
+
+  # /customer/order/{orderId}/delete:
+  #   parameters:
+  #     - in: path
+  #       name: id
+  #       required: true
+  #       schema:
+  #         type: integer
+  #   delete:
+  #     summary:  notifying system server of deletion of by order id
+  #     responses:
+  #       200:
+  #         description: success resonponse
         
-  /customer/{userId}/order/{orderId}/status:
+  /customer/order/{orderId}:
     parameters:
       - in: path
         name: id
         required: true
         schema:
           type: integer
-    get:
-      summary: get order status from system server
+    post:
+      summary: set order status from system server
       responses:
         200:
           description: success response
@@ -48,74 +56,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderStatus'
-    
-  /customer/{userId}/order/{orderId}/robotId:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: get robot id from system server
-      responses:
-        200:
-          description: success response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Robot'
 
 components:
   schemas:
     Order:
-      description: contains the order id and name of the delivery company
       type: object
       required:
-        - id
-        - company_name
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        company_name:
-          type: string
-          example: barg delivery
-        order_description:
-          type : string
-          example : "size 10"
-    OrderStatus:
-      type: object
-      description: the status of the delivery order
-      required:
-        - order
-        - status
-      properties:
-        order:
-          $ref: '#/components/schemas/Order'
-        status: # should use convert this into an enum
-          type: integer
-          example: 1
-          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-          # 0 - order sent
-          # 1 - order received
-          # 2 - robot dispatched
-          # 3 - at store hub
-          # 4 - between hubs
-          # 5 - at destination hub
-          # 6 - arrived
-          # 7 - delivered
-          # 8 - cancelled
-          # 9 - failed
-    SubmitOrder:
-      type: object
-      required:
+        - orderId
         - order_details
         - customer_id
         - store_id
         - store_address
         - customer_address
+        - status
       properties:
         order_details:
           type: string
@@ -132,6 +85,54 @@ components:
           $ref: '#/components/schemas/Address'
         customer_address:
           $ref: '#/components/schemas/Address'
+        status: # should use convert this into an enum
+          type: integer
+          example: 0
+          enum: [0, 7, 8]
+          # 0 - order sent
+          # 1 - order received
+          # 2 - robot dispatched
+          # 3 - at store hub
+          # 4 - between hubs
+          # 5 - at destination hub
+          # 6 - arrived
+          # 7 - delivered
+          # 8 - cancelled
+          # 9 - failed
+        robot_id:
+          type: string
+          example: barg_external_robot_1121d
+    
+    OrderStatus:
+      type: object
+      required:
+        - orderId
+        - customer_id
+        - status
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        customer_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        status: # should use convert this into an enum
+          type: integer
+          example: 0
+          enum: [0, 7, 8]
+          # 0 - order sent
+          # 1 - order received
+          # 2 - robot dispatched
+          # 3 - at store hub
+          # 4 - between hubs
+          # 5 - at destination hub
+          # 6 - arrived
+          # 7 - delivered
+          # 8 - cancelled
+          # 9 - failed
+        
     Address:
       type: object
       required:
@@ -144,11 +145,55 @@ components:
         unit:
           type: string
           example: 'robots r us'
-    Robot:
+
+    SubmitOrder:
       type: object
       required:
-        - id
+        - order_details
+        - customer_id
+        - store_id
+        - store_address
+        - customer_address
+        - status
       properties:
-        id:
+        order_details:
           type: string
-          example: barg_external_robot_1121d
+          example: raspberry pi model 3B 4GB
+        customer_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_address:
+          $ref: '#/components/schemas/Address'
+        customer_address:
+          $ref: '#/components/schemas/Address'
+        status: # should use convert this into an enum
+          type: integer
+          enum: 0
+          # 0 - order sent
+          # 1 - order received
+          # 2 - robot dispatched
+          # 3 - at store hub
+          # 4 - between hubs
+          # 5 - at destination hub
+          # 6 - arrived
+          # 7 - delivered
+          # 8 - cancelled
+          # 9 - failed
+
+    landingResponse:
+      type: object
+      required:
+        - orders
+        - stores
+      properties:
+        orders:
+          type: list
+          example: ['#/components/schemas/Order', '#/components/schemas/Order']
+        stores:
+          type: list
+          example: [d290f1ee-6c54-4b01-90e6-d701748f0851, d290f1ee-6c54-4b01-90e6-d701748f0851]
