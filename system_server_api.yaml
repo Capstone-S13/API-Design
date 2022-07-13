@@ -51,6 +51,18 @@ paths:
       responses:
         '201':
           description: robot successfully ejected
+  /task-status:
+    post:
+      parameters:
+      - in: path
+      name: request
+      required: true
+      schema:
+        $ref: '#/components/schemas/TaskStatus'
+      description: status of the task that is dispatched
+      responses:
+        '200':
+          description: task successfully dispatched
 
 components:
   schemas:
@@ -97,7 +109,7 @@ components:
         robot_id:
           type: string
           example: barg_external_robot_1121d
-    
+
     OrderStatus:
       type: object
       required:
@@ -127,7 +139,7 @@ components:
           # 7 - delivered
           # 8 - cancelled
           # 9 - failed
-    
+
     Address:
       type: object
       required:
@@ -161,7 +173,7 @@ components:
           $ref: '#/components/schemas/Address'
         order:
           $ref: '#/components/schemas/Order'
-    
+
     SubmitOrder:
       type: object
       required:
@@ -179,7 +191,6 @@ components:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        store_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
@@ -200,3 +211,20 @@ components:
           # 7 - delivered
           # 8 - cancelled
           # 9 - failed
+    TaskStatus:
+      type: object
+      required:
+        - robot
+        - task_id
+        - status
+      properties:
+        robot:
+          $ref: '#/components/schemas/Robot'
+        task_id:
+          type: string
+        status:
+          type: integer
+          enum: [0, 1, 2]
+          # 0 - Task Underway
+          # 1 - Task Completed
+          # 2 - Failed
