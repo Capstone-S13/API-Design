@@ -142,26 +142,62 @@ components:
           enum: [0, 1]
           # 0 - delivering to hub
           # 1 - collecting from hub
-    DispatchOrder:
+    Map:
+      description: data of the pgm and yaml map files to be reconstructed
       type: object
       required:
+        - image:
+            type: string
+        - resolution:
+            type: array
+            contains: number
+        - origin:
+            type: array
+            contains: number
+        -negate:
+            type: number
+        - occupied_thresh:
+            type: number
+        - free_thresh:
+            type: number
+        - pgm:
+            type: string
+    Host:
+      description: contains the port and ip of the new fleet manager serve
+      required:
+        - ip:
+            type: string
+        - port:
+            type: integer
+    DispatchOrder:
+      description: dispatch an order to be collected
+      type: object
+      required:
+        - task_id
         - order
         - store_address
+      properties:
+        - task_id:
+            type: string
+        - order:
+            $ref: '#/components/schemas/Order'
+        - store_address:
+            $ref: '#/components/schemas/Address'
     ReceiveRobot:
       type: object
       required:
-        - robot
+        - task_id
         - ingress_point
         - egress_point
-        - store_address
         - order
+        - robot
         - operation
       properties:
+        task_id:
+          type: string
         ingress_point:
           $ref: '#/components/schemas/Address'
         egress_point:
-          $ref: '#/components/schemas/Address'
-        store_address:
           $ref: '#/components/schemas/Address'
         order:
           $ref: '#/components/schemas/Order'
@@ -169,3 +205,23 @@ components:
           $ref: '#/components/schemas/Robot'
         operation:
           $ref: '#/components/schemas/Operation'
+    EjectRobot:
+      type: object
+      required:
+        - task_id
+        - egress_point
+        - new_host
+        - map
+        - initial_pose
+      properties:
+        task_id:
+          type: string
+        egress_point:
+          $ref: '#/components/schemas/Address'
+        new_host:
+          $ref: '#/components/schemas/Host'
+        map:
+          $ref: '#/components/schemas/Map'
+        initial_pose:
+          type: array
+          contains: number
