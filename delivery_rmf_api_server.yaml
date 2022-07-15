@@ -16,7 +16,7 @@ tags:
   - name: developers
 
 paths:
-  /order: # Note that this is coming FROM the system server
+  /internal-task: # Note that this is coming FROM the system server
     post:
       summary: dispatches a new delivery order
       operationId: dispatchOrder
@@ -30,7 +30,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DispatchOrder'
+              $ref: '#/components/schemas/DispatchTask'
+
+  /externl-task: # Note that this is coming FROM the system server
+    post:
+      summary: dispatches a new delivery order
+      operationId: dispatchOrder
+      description: dispatches an order to be collected
+      responses:
+        '201':
+          description: order dispatched
+        '409':
+          description: an existing order has been dispatched
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchTask'
 
   /order/{order}:
     get:
@@ -139,12 +155,10 @@ components:
         task:
           type: integer
           example: 0
-          enum: [0, 1, 2, 3, 4]
+          enum: [0, 1, 2]
           # 0 - delivering to hub
           # 1 - collecting from hub
-          # 2 - direct deliver
-          # 3 - direct collect
-          # 4 - got to place
+          # 2 - go to unit
     Map:
       description: data of the pgm and yaml map files to be reconstructed
       type: object
@@ -172,20 +186,23 @@ components:
             type: string
         - port:
             type: integer
-    DispatchOrder:
+    DispatchTask:
       description: dispatch an order to be collected
       type: object
       required:
         - task_id
-        - order
-        - store_address
+        - operation
       properties:
         - task_id:
             type: string
+        - robot:
+            $ref: '#/components/schemas/Robot'
         - order:
             $ref: '#/components/schemas/Order'
-        - store_address:
+        - destination:
             $ref: '#/components/schemas/Address'
+        - operation:
+            $ref: '#/components/schemas/Operation'
     ReceiveRobot:
       type: object
       required:
