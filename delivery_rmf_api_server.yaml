@@ -188,7 +188,6 @@ components:
       required:
         - task_id
         - ingress_point
-        - egress_point
         - order
         - robot
         - operation
@@ -196,8 +195,6 @@ components:
         task_id:
           type: string
         ingress_point:
-          $ref: '#/components/schemas/Address'
-        egress_point:
           $ref: '#/components/schemas/Address'
         order:
           $ref: '#/components/schemas/Order'
@@ -209,6 +206,7 @@ components:
       type: object
       required:
         - task_id
+        - robot
         - egress_point
         - new_host
         - map
@@ -216,6 +214,8 @@ components:
       properties:
         task_id:
           type: string
+        robot:
+          $ref: '#/components/schemas/Robot'
         egress_point:
           $ref: '#/components/schemas/Address'
         new_host:
