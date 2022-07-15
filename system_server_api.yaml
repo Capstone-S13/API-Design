@@ -215,7 +215,7 @@ components:
       type: object
       required:
         - robot
-        - task_idNone
+        - task_id
         - status
       properties:
         robot:

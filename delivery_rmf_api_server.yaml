@@ -32,7 +32,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DispatchTask'
 
-  /externl-task: # Note that this is coming FROM the system server
+  /external-task: # a seperate route so we know which fleet to dispatch the task to
     post:
       summary: dispatches a new delivery order
       operationId: dispatchOrder
@@ -48,29 +48,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DispatchTask'
 
-  /order/{order}:
-    get:
-      parameters:
-        - in: path
-          name: order
-          required: true
-          schema:
-            $ref: '#/components/schemas/Order'
-          description: the Order JSON of the dispatched order
-      summary: gets the status of the order
-      operationId: getOrderStatus
-      description: gets the status of the order according to the id of the order.
-      responses:
-        '200':
-          description: order status of the given order id is found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderStatus'
-        '404':
-          description: order not found
-
-  /receive-robot:
+  /receive-robot: # may not be required anymore
     post:
       description: request for an external delivery robot to be accepted into the fleet
       operationId: receiveRobot
@@ -103,29 +81,7 @@ components:
         order_description:
           type : string
           example : "size 10"
-    OrderStatus:
-      type: object
-      description: the status of the delivery order
-      required:
-        - order
-        - status
-      properties:
-        order:
-          $ref: '#/components/schemas/Order'
-        status: # should use convert this into an enum
-          type: integer
-          example: 1
-          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-          # 0 - order sent
-          # 1 - order received
-          # 2 - robot dispatched
-          # 3 - at store hub
-          # 4 - between hubs
-          # 5 - at destination hub
-          # 6 - arrived
-          # 7 - delivered
-          # 8 - cancelled
-          # 9 - failed
+
     Address:
       type: object
       required:
