@@ -139,9 +139,12 @@ components:
         task:
           type: integer
           example: 0
-          enum: [0, 1]
+          enum: [0, 1, 2, 3, 4]
           # 0 - delivering to hub
           # 1 - collecting from hub
+          # 2 - direct deliver
+          # 3 - direct collect
+          # 4 - got to place
     Map:
       description: data of the pgm and yaml map files to be reconstructed
       type: object
@@ -195,6 +198,8 @@ components:
         task_id:
           type: string
         ingress_point:
+          $ref: '#/components/schemas/Address'
+        destination:
           $ref: '#/components/schemas/Address'
         order:
           $ref: '#/components/schemas/Order'
