@@ -19,7 +19,7 @@ paths:
   /internal-task: # Note that this is coming FROM the system server
     post:
       summary: dispatches a new delivery order
-      operationId: dispatchOrder
+      operationId: internalDispatchOrder
       description: dispatches an order to be collected
       responses:
         '201':
@@ -35,7 +35,7 @@ paths:
   /external-task: # a seperate route so we know which fleet to dispatch the task to
     post:
       summary: dispatches a new delivery order
-      operationId: dispatchOrder
+      operationId: externalDispatchOrder
       description: dispatches an order to be collected
       responses:
         '201':
@@ -119,29 +119,42 @@ components:
       description: data of the pgm and yaml map files to be reconstructed
       type: object
       required:
-        - image:
-            type: string
-        - resolution:
-            type: array
-            contains: number
-        - origin:
-            type: array
-            contains: number
-        -negate:
-            type: number
-        - occupied_thresh:
-            type: number
-        - free_thresh:
-            type: number
-        - pgm:
-            type: string
+        - image
+        - resolution
+        - origin
+        - negate
+        - occupied_thresh
+        - free_thresh
+        - pgm
+      properties:
+        image:
+          type: string
+        resolution:
+          type: array
+          items:
+            type: integer
+        origin:
+          type: array
+          items:
+            type: integer
+        negate:
+          type: integer
+        occupied_thresh:
+          type: integer
+        free_thresh:
+          type: integer
+        pgm:
+          type: string
     Host:
       description: contains the port and ip of the new fleet manager serve
       required:
-        - ip:
-            type: string
-        - port:
-            type: integer
+        - ip
+        - port
+      properties:
+        ip:
+          type: string
+        port:
+          type: integer
     DispatchTask:
       description: dispatch an order to be collected
       type: object
@@ -149,16 +162,16 @@ components:
         - task_id
         - operation
       properties:
-        - task_id:
-            type: string
-        - robot:
-            $ref: '#/components/schemas/Robot'
-        - order:
-            $ref: '#/components/schemas/Order'
-        - destination:
-            $ref: '#/components/schemas/Address'
-        - operation:
-            $ref: '#/components/schemas/Operation'
+        task_id:
+          type: string
+        robot:
+          $ref: '#/components/schemas/Robot'
+        order:
+          $ref: '#/components/schemas/Order'
+        destination:
+          $ref: '#/components/schemas/Address'
+        operation:
+          $ref: '#/components/schemas/Operation'
     ReceiveRobot:
       type: object
       required:
@@ -202,4 +215,5 @@ components:
           $ref: '#/components/schemas/Map'
         initial_pose:
           type: array
-          contains: number
+          items:
+            type: integer
