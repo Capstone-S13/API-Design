@@ -1,0 +1,252 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Customer App API Design",
+    "description": "first draft of app API design",
+    "version": "1.0.1"
+  },
+  "paths": {
+    "/customer/landing": {
+      "get": {
+        "summary": "get all orders of the customer from system server and get all stores",
+        "responses": {
+          "200": {
+            "description": "success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/landingResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/create/{storeId}": {
+      "parameters": [
+        {
+          "name": "storeId",
+          "in": "path",
+          "required": true,
+          "description": "The store ID",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      ],
+      "post": {
+        "summary": "notifying system server of creation of new order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitOrder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success response. Return OrderStatus."
+          }
+        }
+      }
+    },
+    "/customer/order/{orderId}": {
+      "parameters": [
+        {
+          "name": "orderId",
+          "in": "path",
+          "required": true,
+          "description": "The ID of the user to return.",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      ],
+      "post": {
+        "summary": "set order status from system server",
+        "responses": {
+          "200": {
+            "description": "success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Order": {
+        "type": "object",
+        "required": [
+          "order_id",
+          "order_details",
+          "customer_id",
+          "store_id",
+          "store_address",
+          "customer_address",
+          "status"
+        ],
+        "properties": {
+          "order_details": {
+            "type": "string",
+            "example": "raspberry pi model 3B 4GB"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "customer_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "status": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              0,
+              7,
+              8
+            ]
+          },
+          "robot_id": {
+            "type": "string",
+            "example": "barg_external_robot_1121d"
+          }
+        }
+      },
+      "OrderStatus": {
+        "type": "object",
+        "required": [
+          "orderId",
+          "customer_id",
+          "status"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "status": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              0,
+              7,
+              8
+            ]
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "required": [
+          "building_name",
+          "unit"
+        ],
+        "properties": {
+          "building_name": {
+            "type": "string",
+            "example": "Vivo City"
+          },
+          "unit": {
+            "type": "string",
+            "example": "robots r us"
+          }
+        }
+      },
+      "SubmitOrder": {
+        "type": "object",
+        "required": [
+          "order_details",
+          "customer_id",
+          "store_id",
+          "store_address",
+          "customer_address",
+          "status"
+        ],
+        "properties": {
+          "order_details": {
+            "type": "string",
+            "example": "raspberry pi model 3B 4GB"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "customer_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              0
+            ]
+          }
+        }
+      },
+      "landingResponse": {
+        "type": "object",
+        "required": [
+          "orders",
+          "stores"
+        ],
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "#/components/schemas/Order",
+                "#/components/schemas/Order"
+              ]
+            }
+          },
+          "stores": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "d290f1ee-6c54-4b01-90e6-d701748f0851"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

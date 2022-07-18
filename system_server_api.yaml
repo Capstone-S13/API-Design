@@ -51,14 +51,14 @@ paths:
       responses:
         '201':
           description: robot successfully ejected
-  /task-status:
+  /{task-status}:
     post:
       parameters:
       - in: path
-      name: request
-      required: true
-      schema:
-        $ref: '#/components/schemas/TaskStatus'
+        name: task-status
+        required: true
+        schema:
+          $ref: '#/components/schemas/TaskStatus'
       description: status of the task that is dispatched
       responses:
         '200':
@@ -191,6 +191,7 @@ components:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
@@ -200,7 +201,7 @@ components:
           $ref: '#/components/schemas/Address'
         status: # should use convert this into an enum
           type: integer
-          enum: 0
+          enum: [0]
           # 0 - order sent
           # 1 - order received
           # 2 - robot dispatched
