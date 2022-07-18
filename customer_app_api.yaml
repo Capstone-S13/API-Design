@@ -16,6 +16,14 @@ paths:
                 $ref: '#/components/schemas/landingResponse'
 
   /customer/create/{storeId}:
+    parameters:
+        - name: storeId
+          in: path
+          required: true
+          description: The store ID
+          schema:
+            type: integer
+            format: int64
     post:
       summary: notifying system server of creation of new order
       requestBody: 
@@ -42,11 +50,13 @@ paths:
         
   /customer/order/{orderId}:
     parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
+        - name: orderId
+          in: path
+          required: true
+          description: The ID of the user to return.
+          schema:
+            type: integer
+            format: int64
     post:
       summary: set order status from system server
       responses:
@@ -62,7 +72,7 @@ components:
     Order:
       type: object
       required:
-        - orderId
+        - order_id
         - order_details
         - customer_id
         - store_id
@@ -173,7 +183,7 @@ components:
           $ref: '#/components/schemas/Address'
         status: # should use convert this into an enum
           type: integer
-          enum: 0
+          enum: [0]
           # 0 - order sent
           # 1 - order received
           # 2 - robot dispatched
@@ -192,8 +202,12 @@ components:
         - stores
       properties:
         orders:
-          type: list
-          example: ['#/components/schemas/Order', '#/components/schemas/Order']
+          type: array
+          items:  
+            type: string
+            example: ['#/components/schemas/Order', '#/components/schemas/Order']
         stores:
-          type: list
-          example: [d290f1ee-6c54-4b01-90e6-d701748f0851, d290f1ee-6c54-4b01-90e6-d701748f0851]
+          type: array
+          items:
+            type: string
+            example: [d290f1ee-6c54-4b01-90e6-d701748f0851, d290f1ee-6c54-4b01-90e6-d701748f0851]

@@ -18,7 +18,7 @@ paths:
   /store/order/{orderId}:
     parameters:
       - in: path
-        name: id
+        name: orderId
         required: true
         schema:
           type: integer
@@ -85,8 +85,10 @@ components:
         - orders
       properties:
         orders:
-          type: list
-          example: ['#/components/schemas/Order', '#/components/schemas/Order']
+          type: array
+          items: 
+            type: string
+            example: ['#/components/schemas/Order', '#/components/schemas/Order']
     
     OrderStatus:
       type: object
