@@ -1,0 +1,316 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/capstone_s13/delivery_rmf_api_server/1.0.0"
+    }
+  ],
+  "info": {
+    "description": "API for the company-specific Delivery RMF API Server",
+    "version": "1.0.0",
+    "title": "Delivery RMF API Server API",
+    "contact": {
+      "email": "you@your-company.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "developers"
+    }
+  ],
+  "paths": {
+    "/internal-task": {
+      "post": {
+        "summary": "dispatches a new delivery order",
+        "operationId": "internalDispatchOrder",
+        "description": "dispatches an order to be collected",
+        "responses": {
+          "201": {
+            "description": "order dispatched"
+          },
+          "409": {
+            "description": "an existing order has been dispatched"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DispatchTask"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external-task": {
+      "post": {
+        "summary": "dispatches a new delivery order",
+        "operationId": "externalDispatchOrder",
+        "description": "dispatches an order to be collected",
+        "responses": {
+          "201": {
+            "description": "order dispatched"
+          },
+          "409": {
+            "description": "an existing order has been dispatched"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DispatchTask"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/receive-robot": {
+      "post": {
+        "description": "request for an external delivery robot to be accepted into the fleet",
+        "operationId": "receiveRobot",
+        "responses": {
+          "201": {
+            "description": "robot successfully accepted into fleet"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiveRobot"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Order": {
+        "description": "contains the order id and name of the delivery company",
+        "type": "object",
+        "required": [
+          "id",
+          "company_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "barg delivery"
+          },
+          "order_description": {
+            "type": "string",
+            "example": "size 10"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "required": [
+          "building_name",
+          "unit"
+        ],
+        "properties": {
+          "building_name": {
+            "type": "string",
+            "example": "Vovi City"
+          },
+          "unit": {
+            "type": "string",
+            "example": "robots r us"
+          }
+        }
+      },
+      "Robot": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "barg_external_robot_1121d"
+          }
+        }
+      },
+      "Operation": {
+        "description": "whether the robot is collecting or depositing a parcel",
+        "type": "object",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "Map": {
+        "description": "data of the pgm and yaml map files to be reconstructed",
+        "type": "object",
+        "required": [
+          "image",
+          "resolution",
+          "origin",
+          "negate",
+          "occupied_thresh",
+          "free_thresh",
+          "pgm"
+        ],
+        "properties": {
+          "image": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "negate": {
+            "type": "integer"
+          },
+          "occupied_thresh": {
+            "type": "integer"
+          },
+          "free_thresh": {
+            "type": "integer"
+          },
+          "pgm": {
+            "type": "string"
+          }
+        }
+      },
+      "Host": {
+        "description": "contains the port and ip of the new fleet manager serve",
+        "required": [
+          "ip",
+          "port"
+        ],
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          }
+        }
+      },
+      "DispatchTask": {
+        "description": "dispatch an order to be collected",
+        "type": "object",
+        "required": [
+          "task_id",
+          "operation"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "robot": {
+            "$ref": "#/components/schemas/Robot"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/Operation"
+          }
+        }
+      },
+      "ReceiveRobot": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "ingress_point",
+          "order",
+          "robot",
+          "operation"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "ingress_point": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "robot": {
+            "$ref": "#/components/schemas/Robot"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/Operation"
+          }
+        }
+      },
+      "EjectRobot": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "robot",
+          "egress_point",
+          "new_host",
+          "map",
+          "initial_pose"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "robot": {
+            "$ref": "#/components/schemas/Robot"
+          },
+          "egress_point": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "new_host": {
+            "$ref": "#/components/schemas/Host"
+          },
+          "map": {
+            "$ref": "#/components/schemas/Map"
+          },
+          "initial_pose": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

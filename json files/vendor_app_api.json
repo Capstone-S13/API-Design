@@ -1,0 +1,173 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vendor App API Design",
+    "description": "first draft of app API design",
+    "version": "1.0.1"
+  },
+  "paths": {
+    "/store/landing": {
+      "get": {
+        "summary": "get all orders of the store from system server",
+        "responses": {
+          "200": {
+            "description": "success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/landingResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/order/{orderId}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "orderId",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "post": {
+        "summary": "set order status from system server",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Order": {
+        "type": "object",
+        "required": [
+          "orderId",
+          "order_details",
+          "customer_id",
+          "store_id",
+          "store_address",
+          "customer_address",
+          "status"
+        ],
+        "properties": {
+          "order_details": {
+            "type": "string",
+            "example": "raspberry pi model 3B 4GB"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "customer_address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "status": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              1,
+              2,
+              8,
+              9
+            ]
+          },
+          "robot_id": {
+            "type": "string",
+            "example": "barg_external_robot_1121d"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "required": [
+          "building_name",
+          "unit"
+        ],
+        "properties": {
+          "building_name": {
+            "type": "string",
+            "example": "Vovi City"
+          },
+          "unit": {
+            "type": "string",
+            "example": "robots r us"
+          }
+        }
+      },
+      "landingResponse": {
+        "type": "object",
+        "required": [
+          "orders"
+        ],
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "#/components/schemas/Order",
+                "#/components/schemas/Order"
+              ]
+            }
+          }
+        }
+      },
+      "OrderStatus": {
+        "type": "object",
+        "required": [
+          "orderId",
+          "customer_id",
+          "status"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "status": {
+            "type": "integer",
+            "example": 1,
+            "enum": [
+              1,
+              2,
+              8,
+              9
+            ]
+          }
+        }
+      }
+    }
+  }
+}
