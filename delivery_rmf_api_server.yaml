@@ -16,7 +16,7 @@ tags:
   - name: developers
 
 paths:
-  /order: # Note that this is coming FROM the system server
+  /internal-task: # Note that this is coming FROM the system server
     post:
       summary: dispatches a new delivery order
       operationId: dispatchOrder
@@ -30,31 +30,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DispatchOrder'
+              $ref: '#/components/schemas/DispatchTask'
 
-  /order/{order}:
-    get:
-      parameters:
-        - in: path
-          name: order
-          required: true
-          schema:
-            $ref: '#/components/schemas/Order'
-          description: the Order JSON of the dispatched order
-      summary: gets the status of the order
-      operationId: getOrderStatus
-      description: gets the status of the order according to the id of the order.
+  /external-task: # a seperate route so we know which fleet to dispatch the task to
+    post:
+      summary: dispatches a new delivery order
+      operationId: dispatchOrder
+      description: dispatches an order to be collected
       responses:
-        '200':
-          description: order status of the given order id is found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderStatus'
-        '404':
-          description: order not found
+        '201':
+          description: order dispatched
+        '409':
+          description: an existing order has been dispatched
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchTask'
 
-  /receive-robot:
+  /receive-robot: # may not be required anymore
     post:
       description: request for an external delivery robot to be accepted into the fleet
       operationId: receiveRobot
@@ -87,29 +81,7 @@ components:
         order_description:
           type : string
           example : "size 10"
-    OrderStatus:
-      type: object
-      description: the status of the delivery order
-      required:
-        - order
-        - status
-      properties:
-        order:
-          $ref: '#/components/schemas/Order'
-        status: # should use convert this into an enum
-          type: integer
-          example: 1
-          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-          # 0 - order sent
-          # 1 - order received
-          # 2 - robot dispatched
-          # 3 - at store hub
-          # 4 - between hubs
-          # 5 - at destination hub
-          # 6 - arrived
-          # 7 - delivered
-          # 8 - cancelled
-          # 9 - failed
+
     Address:
       type: object
       required:
@@ -139,9 +111,10 @@ components:
         task:
           type: integer
           example: 0
-          enum: [0, 1]
+          enum: [0, 1, 2]
           # 0 - delivering to hub
           # 1 - collecting from hub
+          # 2 - go to unit
     Map:
       description: data of the pgm and yaml map files to be reconstructed
       type: object
@@ -169,26 +142,28 @@ components:
             type: string
         - port:
             type: integer
-    DispatchOrder:
+    DispatchTask:
       description: dispatch an order to be collected
       type: object
       required:
         - task_id
-        - order
-        - store_address
+        - operation
       properties:
         - task_id:
             type: string
+        - robot:
+            $ref: '#/components/schemas/Robot'
         - order:
             $ref: '#/components/schemas/Order'
-        - store_address:
+        - destination:
             $ref: '#/components/schemas/Address'
+        - operation:
+            $ref: '#/components/schemas/Operation'
     ReceiveRobot:
       type: object
       required:
         - task_id
         - ingress_point
-        - egress_point
         - order
         - robot
         - operation
@@ -197,7 +172,7 @@ components:
           type: string
         ingress_point:
           $ref: '#/components/schemas/Address'
-        egress_point:
+        destination:
           $ref: '#/components/schemas/Address'
         order:
           $ref: '#/components/schemas/Order'
@@ -209,6 +184,7 @@ components:
       type: object
       required:
         - task_id
+        - robot
         - egress_point
         - new_host
         - map
@@ -216,6 +192,8 @@ components:
       properties:
         task_id:
           type: string
+        robot:
+          $ref: '#/components/schemas/Robot'
         egress_point:
           $ref: '#/components/schemas/Address'
         new_host:
