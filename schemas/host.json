@@ -1,0 +1,17 @@
+{
+    "host": {
+        "description": "contains the port and ip of the new fleet manager serve",
+        "required": [
+          "ip",
+          "port"
+        ],
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          }
+        }
+      }
+}

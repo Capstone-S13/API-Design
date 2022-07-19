@@ -1,0 +1,27 @@
+{
+    "dispatch_task": {
+        "description": "dispatch an order to be collected",
+        "type": "object",
+        "required": [
+            "task_id",
+            "operation"
+        ],
+        "properties": {
+        "task_id": {
+            "type": "string"
+        },
+        "robot": {
+            "$ref": "robot.json"
+        },
+        "order": {
+            "$ref": "order.json"
+        },
+        "destination": {
+            "$ref": "address.json"
+        },
+        "operation": {
+            "$ref": "operation.json"
+        }
+        }
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "robot": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "barg_external_robot_1121d"
+          }
+        }
+      }
+}

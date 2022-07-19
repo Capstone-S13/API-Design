@@ -1,0 +1,25 @@
+{
+    "order": {
+        "description": "contains the order id and name of the delivery company",
+        "type": "object",
+        "required": [
+          "id",
+          "company_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "barg delivery"
+          },
+          "order_description": {
+            "type": "string",
+            "example": "size 10"
+          }
+        }
+      }
+}
