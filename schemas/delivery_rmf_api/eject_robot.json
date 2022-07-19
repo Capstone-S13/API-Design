@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "required": [
+    "task_id",
+    "robot",
+    "egress_point",
+    "new_host",
+    "map",
+    "initial_pose"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "robot": {
+      "$ref": "robot.json"
+    },
+    "egress_point": {
+      "$ref": "address.json"
+    },
+    "new_host": {
+      "$ref": "host.json"
+    },
+    "map": {
+      "$ref": "map.json"
+    },
+    "initial_pose": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  }
+
+}

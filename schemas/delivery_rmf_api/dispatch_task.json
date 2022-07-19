@@ -1,12 +1,11 @@
 {
-    "dispatch_task": {
-        "description": "dispatch an order to be collected",
-        "type": "object",
-        "required": [
-            "task_id",
-            "operation"
-        ],
-        "properties": {
+    "description": "dispatch an order to be collected",
+    "type": "object",
+    "required": [
+        "task_id",
+        "operation"
+    ],
+    "properties": {
         "task_id": {
             "type": "string"
         },
@@ -22,6 +21,5 @@
         "operation": {
             "$ref": "operation.json"
         }
-        }
-  }
+    }
 }

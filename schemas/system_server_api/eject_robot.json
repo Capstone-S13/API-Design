@@ -1,0 +1,19 @@
+{
+    "type": "object",
+        "required": [
+          "robot",
+          "egress_point",
+          "order"
+        ],
+        "properties": {
+          "robot": {
+            "$ref": "robot.json"
+          },
+          "egress_point": {
+            "$ref": "address.json"
+          },
+          "order": {
+            "$ref": "order.json"
+          }
+        }
+}

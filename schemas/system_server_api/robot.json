@@ -1,6 +1,5 @@
 {
-    "robot": {
-        "type": "object",
+    "type": "object",
         "required": [
           "id"
         ],
@@ -10,5 +9,4 @@
             "example": "barg_external_robot_1121d"
           }
         }
-      }
 }

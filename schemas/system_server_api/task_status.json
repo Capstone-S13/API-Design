@@ -1,0 +1,24 @@
+{
+    "type": "object",
+        "required": [
+          "robot",
+          "task_id",
+          "status"
+        ],
+        "properties": {
+          "robot": {
+            "$ref": "robot.json"
+          },
+          "task_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          }
+        }
+}

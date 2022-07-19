@@ -1,0 +1,29 @@
+{
+    "type": "object",
+        "required": [
+          "orders",
+          "stores"
+        ],
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "order.json",
+                "order.json"
+              ]
+            }
+          },
+          "stores": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "d290f1ee-6c54-4b01-90e6-d701748f0851"
+              ]
+            }
+          }
+        }
+}

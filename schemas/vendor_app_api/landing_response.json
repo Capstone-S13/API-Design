@@ -1,0 +1,18 @@
+{
+    "type": "object",
+        "required": [
+          "orders"
+        ],
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "order.json",
+                "order.json"
+              ]
+            }
+          }
+        }
+}

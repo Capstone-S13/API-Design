@@ -1,6 +1,5 @@
 {
-    "address": {
-        "type": "object",
+    "type": "object",
         "required": [
           "building_name",
           "unit"
@@ -15,5 +14,4 @@
             "example": "robots r us"
           }
         }
-      }
 }

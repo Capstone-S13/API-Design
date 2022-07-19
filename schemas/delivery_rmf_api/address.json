@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "required": [
+    "building_name",
+    "unit"
+  ],
+  "properties": {
+    "building_name": {
+      "type": "string",
+      "example": "Vovi City"
+    },
+    "unit": {
+      "type": "string",
+      "example": "robots r us"
+    }
+  }  
+}

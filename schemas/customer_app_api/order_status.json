@@ -1,0 +1,29 @@
+{
+    "type": "object",
+        "required": [
+          "orderId",
+          "customer_id",
+          "status"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "status": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              0,
+              7,
+              8
+            ]
+          }
+        }
+}

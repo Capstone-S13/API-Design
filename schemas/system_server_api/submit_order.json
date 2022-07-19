@@ -1,0 +1,39 @@
+{
+    "type": "object",
+        "required": [
+          "order_details",
+          "customer_id",
+          "store_id",
+          "store_address",
+          "customer_address",
+          "status"
+        ],
+        "properties": {
+          "order_details": {
+            "type": "string",
+            "example": "raspberry pi model 3B 4GB"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "store_address": {
+            "$ref": "address.json"
+          },
+          "customer_address": {
+            "$ref": "address.json"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              0
+            ]
+          }
+        }
+}
