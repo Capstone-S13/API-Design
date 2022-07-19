@@ -1,5 +1,4 @@
-{
-   
+{ 
   "description": "contains the port and ip of the new fleet manager serve",
   "required": [
     "ip",

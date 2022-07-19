@@ -12,19 +12,89 @@
       "type": "string"
     },
     "ingress_point": {
-      "$ref": "address.json"
+      "type": "object",
+      "required": [
+        "building_name",
+        "unit"
+      ],
+      "properties": {
+        "building_name": {
+          "type": "string",
+          "example": "Vovi City"
+        },
+        "unit": {
+          "type": "string",
+          "example": "robots r us"
+        }
+      } 
     },
     "destination": {
-      "$ref": "address.json"
+      "type": "object",
+      "required": [
+        "building_name",
+        "unit"
+      ],
+      "properties": {
+        "building_name": {
+          "type": "string",
+          "example": "Vovi City"
+        },
+        "unit": {
+          "type": "string",
+          "example": "robots r us"
+        }
+      } 
     },
     "order": {
-      "$ref": "order.json"
+      "type": "object",
+      "required": [
+        "order_id",
+        "company_name"
+      ],
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "company_name": {
+          "type": "string",
+          "example": "barg delivery"
+        },
+        "order_description": {
+          "type": "string",
+          "example": "size 10"
+        }
+      }
     },
     "robot": {
-      "$ref": "robot.json"
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "barg_external_robot_1121d"
+        }
+      }
     },
     "operation": {
-      "$ref": "operation.json"
+      "type": "object",
+      "required": [
+        "task"
+      ],
+      "properties": {
+        "task": {
+          "type": "integer",
+          "example": 0,
+          "enum": [
+            0,
+            1,
+            2
+          ]
+        }
+      }
     }
   }
 

@@ -13,16 +13,88 @@
       "type": "string"
     },
     "robot": {
-      "$ref": "robot.json"
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "barg_external_robot_1121d"
+        }
+      }
     },
     "egress_point": {
-      "$ref": "address.json"
+      "type": "object",
+      "required": [
+        "building_name",
+        "unit"
+      ],
+      "properties": {
+        "building_name": {
+          "type": "string",
+          "example": "Vovi City"
+        },
+        "unit": {
+          "type": "string",
+          "example": "robots r us"
+        }
+      } 
     },
     "new_host": {
-      "$ref": "host.json"
+      "required": [
+        "ip",
+        "port"
+      ],
+      "properties": {
+        "ip": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        }
+      }
     },
     "map": {
-      "$ref": "map.json"
+      "type": "object",
+      "required": [
+        "image",
+        "resolution",
+        "origin",
+        "negate",
+        "occupied_thresh",
+        "free_thresh",
+        "pgm"
+      ],
+      "properties": {
+        "image": {
+          "type": "string"
+        },
+        "resolution": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "origin": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "negate": {
+          "type": "integer"
+        },
+        "occupied_thresh": {
+          "type": "integer"
+        },
+        "free_thresh": {
+          "type": "integer"
+        },
+        "pgm": {
+          "type": "string"
+        }
+      }
     },
     "initial_pose": {
       "type": "array",
