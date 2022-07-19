@@ -1,7 +1,7 @@
 {
     "type": "object",
         "required": [
-          "orderId",
+          "order_id",
           "order_details",
           "customer_id",
           "store_id",
@@ -10,6 +10,10 @@
           "status"
         ],
         "properties": {
+          "order_id": {
+            "type":"string",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
           "order_details": {
             "type": "string",
             "example": "raspberry pi model 3B 4GB"
@@ -25,10 +29,38 @@
             "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
           },
           "store_address": {
-            "$ref": "address.json"
+            "type": "object",
+            "required": [
+              "building_name",
+              "unit"
+            ],
+            "properties": {
+              "building_name": {
+                "type": "string",
+                "example": "Vivo City"
+              },
+              "unit": {
+                "type": "string",
+                "example": "robots r us"
+              }
+            }
           },
           "customer_address": {
-            "$ref": "address.json"
+            "type": "object",
+            "required": [
+              "building_name",
+              "unit"
+            ],
+            "properties": {
+              "building_name": {
+                "type": "string",
+                "example": "Vivo City"
+              },
+              "unit": {
+                "type": "string",
+                "example": "robots r us"
+              }
+            }
           },
           "status": {
             "type": "integer",
